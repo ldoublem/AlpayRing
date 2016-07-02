@@ -196,7 +196,7 @@ public class RingView extends View {
 
         }
 
-        if (isPointer) {
+        if (!isPointer) {
 
             float xPoint = (float) (getMeasuredWidth() / 2 + (fring.width() / 2) * Math.cos(pointAngle_show * Math.PI / 180));
             float yPoint = (float) (getMeasuredWidth() / 2 + (fring.width() / 2) * Math.sin(pointAngle_show * Math.PI / 180));
@@ -222,6 +222,9 @@ public class RingView extends View {
             canvas.drawCircle(getMeasuredWidth() / 2,getMeasuredWidth()/2,dip2px(getContext(),8f),pointPaint);
 
 
+
+
+
             float xPoint2 = (float) (dip2px(getContext(),5f) * Math.cos((pointAngle_show+90) * Math.PI / 180));
             float yPoint2 = (float) (dip2px(getContext(),5f)* Math.sin((pointAngle_show +90)* Math.PI / 180));
 
@@ -243,7 +246,9 @@ public class RingView extends View {
             canvas.drawText(mShowValue, getMeasuredWidth() / 2 - getFontlength(progerssPaint, mShowValue) / 2,
                     getMeasuredWidth() / 2+getFontHeight(progerssPaint)*1.5f, progerssPaint);
 
-
+            pointPaint.setColor(Color.argb(80,255,255,255));
+            canvas.drawCircle(getMeasuredWidth() / 2,getMeasuredWidth()/2,dip2px(getContext(),12f),pointPaint);
+            pointPaint.setColor(Color.WHITE);
 
 
         }

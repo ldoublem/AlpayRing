@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         valueNameList.add("极好");
         rv_view.setValueNameList(valueNameList);
 //        rv_view.setPointer(true);
-        rv_view.setPointer(true);
+        rv_view.setPointer(false);
 
 
 //        ly_content.setBackgroundColor((Integer) evaluator.evaluate(0f, startColor, endColor));
@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } else {
                     evaluate = (Integer) evaluator.evaluate(interpolatedTime, centerColor, endUseColor);
                 }
-//                ly_content.setBackgroundColor(evaluate);
+                ly_content.setBackgroundColor(evaluate);
 
 
             }
