@@ -1,5 +1,5 @@
 # AlpayRing
-类似支付宝芝麻信用值圆环统计
+类似支付宝芝麻信用仪表盘
 
 ![pic1](https://github.com/ldoublem/AlpayRing/blob/master/app/pic/1.png)
 
