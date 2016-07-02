@@ -60,15 +60,14 @@ public class RingView extends View {
     private int mValue = 0;
     private String mShowValue = "";
     private OnProgerssChange mOnProgerssChange;
+    Path pathPoint=new Path();
 
     public RingView(Context context) {
-        super(context);
-        init();
+        this(context, null);
     }
 
     public RingView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init();
+        this(context, attrs, 0);
     }
 
     public RingView(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -143,8 +142,7 @@ public class RingView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        setLayerType(LAYER_TYPE_SOFTWARE, null);
-
+        canvas.save();
         if (fring == null)
             fring = new RectF(sWidthringPaint + pointShadowLayer, sWidthringPaint + pointShadowLayer,
                     getMeasuredWidth() - sWidthringPaint - pointShadowLayer, getMeasuredWidth() - sWidthringPaint - pointShadowLayer);
@@ -163,13 +161,6 @@ public class RingView extends View {
         canvas.drawArc(fring, startAngle, sweepAngle, false, ringPaint);
         canvas.drawArc(fprogerss, startAngle, sweepAngle, false, ringProgerssPaint);
 
-        float xPoint = (float) (getMeasuredWidth() / 2 + (fring.width() / 2) * Math.cos(pointAngle_show * Math.PI / 180));
-        float yPoint = (float) (getMeasuredWidth() / 2 + (fring.width() / 2) * Math.sin(pointAngle_show * Math.PI / 180));
-
-
-        pointPaint.setShadowLayer(pointShadowLayer, 0, 0, Color.WHITE);//设置阴影
-        canvas.drawCircle(xPoint, yPoint, pointPaintSize, pointPaint);
-        canvas.drawText(mShowValue, getMeasuredWidth() / 2 - getFontlength(progerssPaint, mShowValue) / 2, getMeasuredWidth() / 2, progerssPaint);
 
 
         for (int i = 0; i < valueList.size(); i++) {
@@ -183,15 +174,13 @@ public class RingView extends View {
             canvas.drawTextOnPath(value, path,
                     (float) (Math.PI * fprogerssPath.width() * ((startAngleBig + 360) % 360) / 360) - getFontlength(textPaint, value) / 2,
                     getFontHeight(textPaint) / 2, textPaint);
-
-            if (i < valueList.size() - 1) {
+            if (i <= valueNameList.size() - 1) {
                 textPaint.setColor(Color.argb(180, 146, 204, 255));
 
                 String name = valueNameList.get(i);
                 canvas.drawTextOnPath(name, path,
                         (float) (Math.PI * fprogerssPath.width() * ((startAngleBig + unit / 2 + 360) % 360) / 360) - getFontlength(textPaint, name) / 2,
                         getFontHeight(textPaint) / 2, textPaint);
-
 
             }
             if (i < valueList.size() - 1) {
@@ -207,6 +196,58 @@ public class RingView extends View {
 
         }
 
+        if (isPointer) {
+
+            float xPoint = (float) (getMeasuredWidth() / 2 + (fring.width() / 2) * Math.cos(pointAngle_show * Math.PI / 180));
+            float yPoint = (float) (getMeasuredWidth() / 2 + (fring.width() / 2) * Math.sin(pointAngle_show * Math.PI / 180));
+//            pointPaint.setShadowLayer(pointShadowLayer, 0, 0, Color.WHITE);//设置阴影
+            pointPaint.setColor(Color.argb(80,255,255,255));
+
+            canvas.drawCircle(xPoint, yPoint, pointPaintSize+8, pointPaint);
+            pointPaint.setColor(Color.WHITE);
+
+
+            canvas.drawCircle(xPoint, yPoint, pointPaintSize, pointPaint);
+
+            progerssPaint.setTextSize(progerssPaintSize);
+
+
+            canvas.drawText(mShowValue, getMeasuredWidth() / 2 - getFontlength(progerssPaint, mShowValue) / 2, getMeasuredWidth() / 2, progerssPaint);
+        } else {
+
+            float xPoint = (float) (getMeasuredWidth() / 2 + (fring.width() / 3) * Math.cos(pointAngle_show * Math.PI / 180));
+            float yPoint = (float) (getMeasuredWidth() / 2 + (fring.width() / 3) * Math.sin(pointAngle_show * Math.PI / 180));
+
+            canvas.drawCircle(getMeasuredWidth() / 2,getMeasuredWidth()/2,dip2px(getContext(),5f),pointPaint);
+            canvas.drawCircle(getMeasuredWidth() / 2,getMeasuredWidth()/2,dip2px(getContext(),8f),pointPaint);
+
+
+            float xPoint2 = (float) (dip2px(getContext(),5f) * Math.cos((pointAngle_show+90) * Math.PI / 180));
+            float yPoint2 = (float) (dip2px(getContext(),5f)* Math.sin((pointAngle_show +90)* Math.PI / 180));
+
+
+            float xPoint3 = (float) (dip2px(getContext(),5f) * Math.cos((pointAngle_show-90) * Math.PI / 180));
+            float yPoint3 = (float) (dip2px(getContext(),5f) * Math.sin((pointAngle_show-90) * Math.PI / 180));
+
+
+            pathPoint.reset();
+            pathPoint.moveTo(xPoint,yPoint);
+
+            pathPoint.lineTo(getMeasuredWidth() / 2-xPoint2,getMeasuredWidth() / 2-yPoint2);
+
+            pathPoint.lineTo(getMeasuredWidth() / 2-xPoint3,getMeasuredWidth() / 2-yPoint3);
+            pathPoint.close();
+            canvas.drawPath(pathPoint,pointPaint);
+            progerssPaint.setTextSize(progerssPaintSize*2/3);
+
+            canvas.drawText(mShowValue, getMeasuredWidth() / 2 - getFontlength(progerssPaint, mShowValue) / 2,
+                    getMeasuredWidth() / 2+getFontHeight(progerssPaint)*1.5f, progerssPaint);
+
+
+
+
+        }
+        canvas.restore();
 
     }
 
@@ -245,19 +286,7 @@ public class RingView extends View {
     public void setValueList(List<Integer> list) {
         valueList.clear();
         valueList.addAll(list);
-//        valueList.add(350);
-//        valueList.add(450);
-//        valueList.add(550);
-//        valueList.add(650);
-//        valueList.add(750);
-//        valueList.add(850);
 
-
-//        valueNameList.add("较差");
-//        valueNameList.add("中等");
-//        valueNameList.add("良好");
-//        valueNameList.add("优秀");
-//        valueNameList.add("极好");
     }
 
     public void setValueNameList(List<String> list) {
@@ -272,12 +301,6 @@ public class RingView extends View {
             super.applyTransformation(interpolatedTime, t);
             if (valueList.size() > 0) {
                 pointAngle_show = startAngle + interpolatedTime * sweepAngle / (valueList.get(valueList.size() - 1) - valueList.get(0)) * (mValue - valueList.get(0));
-
-//
-//
-//            pointAngle_show=startAngle+pointAngle*interpolatedTime;
-
-
                 mShowValue = String.valueOf((int) (valueList.get(0) + (mValue - valueList.get(0)) * interpolatedTime));
                 invalidate();
                 if (mOnProgerssChange != null)
@@ -288,6 +311,12 @@ public class RingView extends View {
 
     public interface OnProgerssChange {
         void OnProgerssChange(float interpolatedTime);
+    }
+
+    boolean isPointer = false;
+
+    public void setPointer(boolean pointer) {
+        this.isPointer = pointer;
     }
 
 
