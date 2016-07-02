@@ -16,7 +16,7 @@
             public void OnProgerssChange(float interpolatedTime) {
 
             }
-        },(int)(f*animDuration));
+        },animDuration);
 ```
 
 
