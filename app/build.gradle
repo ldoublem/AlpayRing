@@ -1,11 +1,12 @@
-apply plugin: 'com.android.application'
-
+//apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        applicationId "com.ldoublem.alpayRing"
+//        applicationId "com.ldoublem.alpayRing"
         minSdkVersion 21
         targetSdkVersion 23
         versionCode 1
